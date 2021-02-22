@@ -8,7 +8,7 @@ Option Explicit On
 Module ShuffleTheDeck
 
     Sub Main()
-        'Create array with each card assigned to a number and a value if the card has already been used during the shuffle
+        'Create array with each card assigned to a number and a boolean value stating if the card has already been drawn during the current shuffle
         Dim deck = New Object(51, 2) {
             {1, "Ace of Clubs", False},
             {2, "Two of Clubs", False},
@@ -73,22 +73,27 @@ Module ShuffleTheDeck
         While userInput <> "q"
             userInput = Console.ReadLine()
             If userInput = "s" Then
+                'By entering "s" it will skip the code to draw a card
 
             ElseIf userInput = "debug" Then
+                ' entering the word "debug" will write out each card and if the card has been drawn
                 For i = LBound(deck) To UBound(deck)
+                    'this section of debug will print out each card in an organized fashion
                     Console.WriteLine(StrDup(30, "-"))
                     Console.Write(CStr(deck(i, 0)).PadLeft(3) & "|")
                     Console.Write(CStr(deck(i, 1)).PadRight(18) & "|")
                     Console.Write(CStr(deck(i, 2)).PadLeft(5) & "|")
                     Console.WriteLine()
                 Next
+                'this section of debug will tell the total number of cards dealt and the number of cards drawn this shuffle
                 Console.WriteLine(StrDup(30, "-"))
                 Console.WriteLine($"Total number of cards dealt is: {cardsDealt}.")
                 Console.WriteLine($"Total number of cards drawn this shuffle is: {cardsDrawn}.")
             ElseIf userInput = "q" Then
-
+                ' entering "q" will quit the program
             Else
                 While bool = False
+                    'this while loop will draw random cards until a card that has not been drawn is drawn
                     card = GetRandomNumber(UBound(deck))
                     bool = CBool(deck(card, 2))
                     If bool = False Then
@@ -98,13 +103,16 @@ Module ShuffleTheDeck
                         cardsDrawn += 1
                         cardsDealt += 1
                     Else
+                        'set boolean value back to false so the loop will run again
                         bool = False
                     End If
                 End While
+                'set boolean value back to false so the loop will run on the next card draw
                 bool = False
             End If
 
             If cardsDrawn = UBound(deck) + 1 Then
+                'if all the cards from the deck have been drawn the program will automatically shuffle cards back into the deck
                 For i = LBound(deck) To UBound(deck)
 
                     If CBool(deck(i, 2)) = False Then
@@ -115,7 +123,7 @@ Module ShuffleTheDeck
                 Console.WriteLine("Deck has been shuffled")
                 cardsDrawn = 0
             ElseIf userInput = "s" Then
-
+                'if the the user input is "s" the the deck will be shuffled
                 For i = LBound(deck) To UBound(deck)
                     deck(i, 2) = False
                 Next
@@ -124,14 +132,6 @@ Module ShuffleTheDeck
             End If
         End While
     End Sub
-
-    Function ShuffleDeck(deck As Array) As Object
-
-        For i = LBound(deck) To UBound(deck)
-            'deck(i, 2) = False
-        Next
-        Return (deck)
-    End Function
 
     ''' <summary>
     ''' this function will return a random number between 1 and a maximum number that is input
